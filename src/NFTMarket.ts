@@ -39,8 +39,7 @@ export default class NFTMarket {
         const tokenMap = this.state.getMapping(collectionId);
         const assetId = await Asset.calculateAssetId(nonce)
 
-        new Asset(assetId.value).issue({
-            assetId: assetId.value,
+        new Asset(assetId).issue({
             decimals: 1,
             quantity: 1,
             name: `${await this.state.getString('name')}` + collectionId,
@@ -51,7 +50,7 @@ export default class NFTMarket {
 
         const tokenId = await this.state.getInt(`${collectionId}`)
 
-        tokenMap.set(`${tokenId + 1}`, assetId.value)
+        tokenMap.set(`${tokenId + 1}`, assetId)
     }
 
 
@@ -75,7 +74,7 @@ export default class NFTMarket {
     ) {
         const selled = this.state.getMapping("selled");
         const forSale = this.state.getMapping("forSale");
-        const tokenMap = this.state.getMapping("collectionId");
+        const tokenMap = this.state.getMapping(collectionId);
 
         const tokenAssetId = await tokenMap.get<string>(tokenId.toString())
         const price = await forSale.get(`${collectionId}_${tokenId}`);
