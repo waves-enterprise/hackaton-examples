@@ -19,7 +19,8 @@
     "noFallthroughCasesInSwitch": false,
     "resolveJsonModule": true,
     "paths": {
-      "@waves-enterprise/js-contract-grpc-client/*": ["node_modules/my-protos/*"],
-    },
-  }
+      "@waves-enterprise/js-contract-grpc-client/*": ["node_modules/my-protos/*"]
+    }
+  },
+  "include": ["src", "index.ts"]
 }

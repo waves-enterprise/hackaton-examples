@@ -1,5 +1,5 @@
 module.exports = {
-  image: "contract-image",
+  image: "log-contract",
   name: 'Your Contract Name',
   version: '0.0.1', // default=latest
   networks: {
@@ -11,13 +11,11 @@ module.exports = {
       seed: '#paste your seed phrase here'
     },
     sandbox: {
-      registry: 'localhost:5000',
+      registry: 'localhost:5001',
       nodeAddress: 'http://localhost:6862',
-      seed: '#paste your seed phrase here',
+      seed: 'slam about victory still chief attack accuse giggle tone rabbit prefer inner process shrug item',
       params: {
-        init: () => ({
-            param: '${value}'
-        })
+        init: () => ({})
       }
     }
   }
