@@ -15,8 +15,8 @@ async function create() {
 
     const tx = TRANSACTIONS.CreateContract.V5({
         fee,
-        imageHash: '6a96b3d139a4c7c8319a177ded99caef24f1f7faef3265be6638e67eff8f906c',
-        image: 'nft-market:latest',
+        imageHash: 'd9bf733034cd5cc70f73d13d60b0df1ec919309f0f105387c3f7be3e63046ba8',
+        image: 'nft-marketplace:latest',
         validationPolicy: {type: "any"},
         senderPublicKey: await keypair.publicKey(),
         params: [{
@@ -25,7 +25,7 @@ async function create() {
             value: 'WESTNFT'
         }],
         payments: [],
-        contractName: 'nft-markeplace',
+        contractName: 'nft-markeplace-rc3',
         apiVersion: '1.0'
     })
 

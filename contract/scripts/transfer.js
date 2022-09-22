@@ -8,6 +8,15 @@ async function transfer() {
 
     const keypair = await Keypair.fromExistingSeedPhrase(SEED)
 
+    TRANSACTIONS.Transfer.V3({
+        attachment: "",
+        senderPublicKey: await keypair.publicKey(),
+        assetId: "",
+        amount: 100000000,
+        fee,
+    })
+
+
     const tx = TRANSACTIONS.CallContract.V5({
         fee: fee,
         contractId: 'EBTLScUgUpWwRtFpaLPYtsYdWnwzN7T2dPS7oqFrfLT2',

@@ -12,15 +12,20 @@ async function issue() {
 
     const tx = TRANSACTIONS.CallContract.V5({
         fee: fee,
-        contractId: 'EBTLScUgUpWwRtFpaLPYtsYdWnwzN7T2dPS7oqFrfLT2',
+        contractId: 'CFFVWpnzDueS2kGWt3x7KEBV5uKnxmTAdMpmz1wajFXt',
         contractVersion: 1,
         senderPublicKey: await keypair.publicKey(),
         payments: [],
         params: [
             {
                 type: "string",
-                value: "issueTokens",
+                value: "issue",
                 key: 'action'
+            },
+            {
+                type: "string",
+                value: "WEST_1",
+                key: 'collectionId'
             }
         ],
     })

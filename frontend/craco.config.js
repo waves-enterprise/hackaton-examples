@@ -1,0 +1,25 @@
+const webpack = require('webpack');
+
+// craco.config.js
+module.exports = {
+    webpack: {
+        plugins: {
+            add: [
+                new webpack.ProvidePlugin({
+                    process: "process/browser",
+                    Buffer: ["buffer", "Buffer"],
+                }),
+            ]
+        },
+        configure: {
+            resolve: {
+                fallback: {
+                    path: require.resolve("path-browserify"),
+                    crypto: require.resolve("crypto-browserify"),
+                    stream: require.resolve("stream-browserify"),
+                    "buffer": require.resolve("buffer")
+                },
+            },
+        },
+    },
+};

@@ -48,9 +48,15 @@ export default class NFTMarket {
             nonce: nonce
         });
 
-        const tokenId = await this.state.getInt(`${collectionId}`)
+        let tokenId = await this.state.tryGetInt(`${collectionId}`)
 
-        tokenMap.set(`${tokenId + 1}`, assetId)
+        if (!tokenId) {
+            tokenId = 1
+        } else {
+            tokenId += 1
+        }
+
+        tokenMap.set(`${tokenId}`, assetId)
     }
 
 
@@ -69,7 +75,6 @@ export default class NFTMarket {
     async buy(
         @Param('tokenId') tokenId: number,
         @Param('collectionId') collectionId: string,
-        @Param('priceSignature') signature: string,
         payments: Payments
     ) {
         const selled = this.state.getMapping("selled");
@@ -78,7 +83,7 @@ export default class NFTMarket {
 
         const tokenAssetId = await tokenMap.get<string>(tokenId.toString())
         const price = await forSale.get(`${collectionId}_${tokenId}`);
-        const isSelled = await selled.get<boolean>(`${collectionId}_${tokenId}`);
+        const isSelled = await selled.tryGet<boolean>(`${collectionId}_${tokenId}`);
 
         if (!tokenId) {
             throw new Error('Token not minted or already selled')
