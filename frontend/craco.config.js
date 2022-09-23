@@ -12,6 +12,16 @@ module.exports = {
             ]
         },
         configure: {
+            module: {
+                rules: [
+                    {
+                        test: /\.m?js/,
+                        resolve: {
+                            fullySpecified: false
+                        }
+                    }
+                ]
+            },
             resolve: {
                 fallback: {
                     path: require.resolve("path-browserify"),
