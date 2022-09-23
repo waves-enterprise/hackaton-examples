@@ -44,8 +44,16 @@ export function SwapScreen() {
 
         const signedTx = await window.WEWallet.signTx(tx);
 
-        // DO WAIT FOR TX
-        // APPLY LOADER
+        try {
+            const res = await sdk.broadcastRaw(signedTx)
+
+            console.log(res);
+            // DO WAIT FOR TX
+        } catch (e) {
+
+
+        }
+
     }
 
 
