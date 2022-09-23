@@ -1,5 +1,4 @@
 import React from 'react';
-import './App.css';
 import {We} from "@wavesenterprise/sdk";
 import {TRANSACTION_TYPES, TRANSACTIONS} from "@wavesenterprise/transactions-factory";
 import {Keypair} from "@wavesenterprise/signer";
@@ -11,8 +10,11 @@ const SEED = 'when cluster camera mistake movie certain category garlic regret b
 
 function App() {
     const handleTx = async () => {
+        await window.WEWallet.initialPromise
+
         const recipient = await Keypair.generate();
         const config: any = await sdk.node.config();
+
         const fee = config.minimumFee[TRANSACTION_TYPES.Transfer]
 
         const senderKP = await Keypair.fromExistingSeedPhrase(SEED);
@@ -25,10 +27,9 @@ function App() {
             senderPublicKey: await senderKP.publicKey()
         })
 
-        const signedTx = await sdk.signer.getSignedTx(tx, SEED)
+        const signedTx = await window.WEWallet.signTx(tx);
 
-        const res = await sdk.broadcast(signedTx)
-        console.log('Sended Tx:', res)
+        const res = await sdk.broadcastRaw(signedTx)
     }
 
     return (

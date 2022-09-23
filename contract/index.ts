@@ -1,3 +1,3 @@
 import {start} from "@wavesenterprise/contract-core";
 
-start('./src/NFTMarket');
+start('./src/AMM');

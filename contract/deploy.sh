@@ -1,1 +1,0 @@
-curl -X POST "https://carter.welocal.dev/authServiceAddress/v1/auth/token" -H "accept: application/json" -H "Authorization: Bearer east-service"

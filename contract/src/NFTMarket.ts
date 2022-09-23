@@ -9,13 +9,10 @@ import {
     Payments,
     State
 } from "@wavesenterprise/contract-core";
-import {bytesToString, createAddress, strToBytes} from "@wavesenterprise/crypto-utils";
 
 
 @Contract()
 export default class NFTMarket {
-    networkByte = 'V'.charCodeAt(0)
-
     @State() state: ContractState;
     @Ctx context: Context;
 
@@ -23,6 +20,11 @@ export default class NFTMarket {
     async _contructor(
         @Param('name') name: string,
     ) {
+        const res = await Asset.getRPCConnection().Contract
+            .getContractBalances({
+                assetsIds: [""]
+            })
+        console.log(res, "res")
         this.state.setString("name", name);
         this.state.setString("admin", this.context.tx.senderPublicKey);
     }
@@ -101,10 +103,8 @@ export default class NFTMarket {
             throw new Error(`Need more money for sell token ${collectionId} ${tokenId}`)
         }
 
-        const recipientAddress = createAddress(strToBytes(this.context.tx.senderPublicKey), this.networkByte)
-
         new Asset(tokenAssetId)
-            .transfer(bytesToString(recipientAddress), 1);
+            .transfer(this.context.tx.sender, 1);
 
         forSale.set(`${collectionId}_${tokenId}`, undefined);
         selled.set(`${collectionId}_${tokenId}`, true)

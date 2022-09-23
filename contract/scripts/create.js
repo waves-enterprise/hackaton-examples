@@ -15,17 +15,25 @@ async function create() {
 
     const tx = TRANSACTIONS.CreateContract.V5({
         fee,
-        imageHash: 'd9bf733034cd5cc70f73d13d60b0df1ec919309f0f105387c3f7be3e63046ba8',
-        image: 'nft-marketplace:latest',
+        imageHash: 'aec264c7cfae12ad2953ecec4855fed0edc7404f4d67c6ad1e070c46026bb10b',
+        image: 'go-test:latest',
         validationPolicy: {type: "any"},
         senderPublicKey: await keypair.publicKey(),
         params: [{
-            key: 'name',
+            key: 'assetId',
             type: 'string',
-            value: 'WESTNFT'
+            value: 'AmL1n9b8NJtPcMALhN2CScDadLMBg48kEwux6Jg9Ar7J'
         }],
-        payments: [],
-        contractName: 'nft-markeplace-rc3',
+        payments: [
+            {
+                amount: 100000000
+            },
+            {
+                assetId: "AmL1n9b8NJtPcMALhN2CScDadLMBg48kEwux6Jg9Ar7J",
+                amount: 100000
+            }
+        ],
+        contractName: 'gottest',
         apiVersion: '1.0'
     })
 
