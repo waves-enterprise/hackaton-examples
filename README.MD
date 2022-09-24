@@ -89,12 +89,21 @@
 
 ---
 
-> ### FAQ: Как осуществляется добавление смарт-контракта в сеть WE?
+> ## FAQ:
+> ### Как осуществляется добавление смарт-контракта в сеть WE?
 >
 > В общем случае алгоритм состоит из базовых шагов:
 > 1. Собрать docker-образ смарт-контракта
 > 2. Добавить docker-образ в доступный для нод Docker Registry (hub.docker.com)
 > 3. Отправить от имени адреса с ролью contract-developer подписанную транзакцию [CreateContractTransaction](https://docs.wavesenterprise.com/en/latest/description/transactions/tx-list.html#create-contract)
+>
+> ### Откуда взять `imageHash` для транзакции создания смарт-контракта?
+>
+> Можно воспользоваться следующей командой:
+> ```
+> docker inspect --format='{{.Id}}' YOUR_IMAGE_NAME:IMAGE_VERSION | awk '{print \"ImageHash: \" substr($0,8)}'
+> ```
+> где `YOUR_IMAGE_NAME:IMAGE_VERSION` — название и версия собранного Docker-образа с контрактом.
 
 ***
 
