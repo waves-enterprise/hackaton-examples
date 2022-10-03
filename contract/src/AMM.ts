@@ -1,5 +1,7 @@
 import {Action, Asset, Context, ContractState, Ctx, Param, Payments, State} from "@wavesenterprise/contract-core";
 
+import Long from 'long'
+
 /**
  * CPMM to swap WEST to custom asset
  */
@@ -10,7 +12,15 @@ export default class AMM {
     @Action({onInit: true})
     async _contructor(
         @Param('assetId') assetId: string,
+        payments: Payments
     ) {
+
+
+        console.log(assetId, payments[0].amount.toNumber())
+        // console.log(payments[0].amount.toString(), 'payments', payments[0].amount, Long.fromValue(payments[0].amount).toInt())
+
+
+        this.state.setInt('balance', payments[0].amount.toNumber())
         this.state.setString("assetId", assetId);
         this.state.setString("admin", this.context.tx.senderPublicKey);
     }
@@ -25,28 +35,10 @@ export default class AMM {
             throw new Error('Payment required!');
         }
 
-        const amountInWithFee = (from.amount * 997) / 1000;
+        const amountInWithFee = from.amount.multiply(997).div(1000);
 
         const reserve0 = await this.state.tryGetString('reserve0')
         const reserve1 = await this.state.tryGetString('reserve1')
-
-        if (!from.assetId) {
-            const amountOut = (BigInt(reserve1) * BigInt(amountInWithFee)) / (BigInt(reserve0) + BigInt(amountInWithFee));
-
-            new Asset(pairAssetAddress).transfer(this.context.tx.sender, Number(amountOut))
-
-            this.state.setString('reserve0', String(BigInt(reserve0) + BigInt(amountInWithFee)))
-            this.state.setString('reserve1', String(BigInt(reserve1) - amountOut))
-        } else if (from.assetId === pairAssetAddress) {
-            const amountOut = (BigInt(reserve0) * BigInt(amountInWithFee)) / (BigInt(reserve1) + BigInt(amountInWithFee));
-
-            new Asset("").transfer(this.context.tx.sender, Number(amountOut))
-
-            this.state.setString('reserve0', String(BigInt(reserve0) - amountOut))
-            this.state.setString('reserve1', String(BigInt(reserve1) + BigInt(amountInWithFee)))
-        } else {
-            throw new Error('Non matching assets to swap!')
-        }
     }
 
     @Action()
@@ -71,13 +63,14 @@ export default class AMM {
         const reserve0 = await this.state.tryGetString('reserve0')
         const reserve1 = await this.state.tryGetString('reserve1')
 
-        this.state.setString('reserve0', (BigInt(reserve0) + BigInt(assetA.amount)).toString())
-        this.state.setString('reserve1', (BigInt(reserve1) + BigInt(assetB.amount)).toString())
+        // this.state.setString('reserve0', (BigInt(reserve0) + BigInt(assetA.amount)).toString())
+        // this.state.setString('reserve1', (BigInt(reserve1) + BigInt(assetB.amount)).toString())
     }
 
     @Action()
     async __issueTokens() {
         const assetod = await Asset.calculateAssetId(1);
+        const assetod1 = await Asset.calculateAssetId(2);
 
         console.log(assetod);
 
@@ -91,6 +84,11 @@ export default class AMM {
             nonce: 1
         });
 
+
+        // prefix_{Key}
+
+
+        this.state.getMapping("pref")
 
         new Asset(assetod).transfer(this.context.sender, 1000000)
     }

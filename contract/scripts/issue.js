@@ -4,37 +4,38 @@ const {Keypair} = require("@wavesenterprise/signer");
 
 const SEED = 'copper venture beauty snake wear million champion enact humor visa prepare garment party rapid annual'
 const NODE_URL = 'http://localhost:6862';
-const sdk = new We(NODE_URL);
+const sdk = new We(NODE_URL)
 
-const CONTRACT_ID = 'A1t23q7F6F3y2KE1ScgZLJErMcKazdLogCoTeVCkj1Ry'
-
-async function create() {
+async function issue() {
     const config = await sdk.node.config()
-    const fee = config.minimumFee[TRANSACTION_TYPES.Transfer]
+    const fee = config.minimumFee[TRANSACTION_TYPES.Issue]
 
     const keypair = await Keypair.fromExistingSeedPhrase(SEED);
 
-    const tx = TRANSACTIONS.UpdateContract.V4({
+    console.log(await keypair.address())
+
+    const tx = TRANSACTIONS.Issue.V2({
         fee,
-        contractId: CONTRACT_ID,
-        imageHash: 'bd1b8a36961f1c26595cf6d597b9a146fe2c5935bacd5044d142411b39878a7e',
-        image: 'nft-mp:latest',
-        validationPolicy: {type: "any"},
+        name: "WAVBER",
+        description: 'testtoken',
+        script: null,
+        chainId: "V".charCodeAt(0),
         senderPublicKey: await keypair.publicKey(),
-        contractName: 'amm-v1',
-        apiVersion: '1.0'
+        reissuable: false,
+        quantity: 100000000,
+        decimals: 8,
     })
 
     const signedTx = await sdk.signer.getSignedTx(tx, SEED);
 
+    console.log(signedTx.getRawBody())
+
     const res = await sdk.broadcast(signedTx);
 
-
     console.log(res)
-
 }
 
-create()
+issue()
     .then(() => {
         console.log('Successfully executed')
     })

@@ -2,7 +2,6 @@ const {We} = require('@wavesenterprise/sdk');
 const {TRANSACTIONS} = require('@wavesenterprise/transactions-factory');
 const {Keypair} = require("@wavesenterprise/signer");
 
-
 const SEED = 'copper venture beauty snake wear million champion enact humor visa prepare garment party rapid annual'
 const NODE_URL = 'http://localhost:6862';
 const sdk = new We(NODE_URL)
@@ -15,39 +14,29 @@ async function create() {
 
     const tx = TRANSACTIONS.CreateContract.V5({
         fee,
-        imageHash: 'aec264c7cfae12ad2953ecec4855fed0edc7404f4d67c6ad1e070c46026bb10b',
-        image: 'go-test:latest',
+        imageHash: '98fc89d54688714e6334fb12dd334e946978b163cacf0ea40cbdb3cc8f08fee4',
+        image: 'test:latest',
         validationPolicy: {type: "any"},
         senderPublicKey: await keypair.publicKey(),
         params: [{
             key: 'assetId',
             type: 'string',
-            value: 'AmL1n9b8NJtPcMALhN2CScDadLMBg48kEwux6Jg9Ar7J'
+            value: 'EXAMPLE'
         }],
         payments: [
             {
-                amount: 100000000
-            },
-            {
-                assetId: "AmL1n9b8NJtPcMALhN2CScDadLMBg48kEwux6Jg9Ar7J",
-                amount: 100000
+                amount: 1
             }
         ],
-        contractName: 'gottest',
+        contractName: 'stub-contract',
         apiVersion: '1.0'
     })
 
-
-
     const signedTx = await sdk.signer.getSignedTx(tx, SEED);
-
-    console.log(signedTx.getRawBody())
-
     const res = await sdk.broadcast(signedTx);
 
 
     console.log(res)
-
 }
 
 create()

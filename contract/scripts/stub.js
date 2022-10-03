@@ -1,40 +1,50 @@
 const {We} = require('@wavesenterprise/sdk');
-const {TRANSACTIONS, TRANSACTION_TYPES} = require('@wavesenterprise/transactions-factory');
+const {TRANSACTIONS} = require('@wavesenterprise/transactions-factory');
 const {Keypair} = require("@wavesenterprise/signer");
 
 const SEED = 'copper venture beauty snake wear million champion enact humor visa prepare garment party rapid annual'
 const NODE_URL = 'http://localhost:6862';
-const sdk = new We(NODE_URL);
+const sdk = new We(NODE_URL)
 
-const CONTRACT_ID = 'A1t23q7F6F3y2KE1ScgZLJErMcKazdLogCoTeVCkj1Ry'
+const call = process.argv[2];
 
-async function create() {
+const CONTRACT_ID = 'CaPeG2t3Xsjcq9E6o4g4ncPg4S6zJmjdEQsQpuHSVERE'
+
+console.log("Call ", {call})
+
+async function exampleAction() {
     const config = await sdk.node.config()
-    const fee = config.minimumFee[TRANSACTION_TYPES.Transfer]
+    const fee = config.minimumFee[104]
 
     const keypair = await Keypair.fromExistingSeedPhrase(SEED);
 
-    const tx = TRANSACTIONS.UpdateContract.V4({
-        fee,
+    const tx = TRANSACTIONS.CallContract.V5({
         contractId: CONTRACT_ID,
-        imageHash: 'bd1b8a36961f1c26595cf6d597b9a146fe2c5935bacd5044d142411b39878a7e',
-        image: 'nft-mp:latest',
-        validationPolicy: {type: "any"},
+        params: [
+            {
+                key: 'action',
+                value: 'exampleAction',
+                type: 'string'
+            },
+        ],
         senderPublicKey: await keypair.publicKey(),
-        contractName: 'amm-v1',
-        apiVersion: '1.0'
+        fee: fee,
+        contractVersion: 1,
+        payments: []
     })
 
     const signedTx = await sdk.signer.getSignedTx(tx, SEED);
 
     const res = await sdk.broadcast(signedTx);
 
-
     console.log(res)
-
 }
 
-create()
+const methods = {
+    exampleAction
+}
+
+methods[call]()
     .then(() => {
         console.log('Successfully executed')
     })

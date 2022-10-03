@@ -84,7 +84,7 @@ export default class NFTMarket {
         const tokenMap = this.state.getMapping(collectionId);
 
         const tokenAssetId = await tokenMap.get<string>(tokenId.toString())
-        const price = await forSale.get(`${collectionId}_${tokenId}`);
+        const price = await forSale.get<string>(`${collectionId}_${tokenId}`);
         const isSelled = await selled.tryGet<boolean>(`${collectionId}_${tokenId}`);
 
         if (!tokenId) {
@@ -99,7 +99,7 @@ export default class NFTMarket {
             throw new Error(`You need to attach tokens for buy nft`)
         }
 
-        if (payments[0].amount < price) {
+        if (payments[0].amount.lt(Number(price))) {
             throw new Error(`Need more money for sell token ${collectionId} ${tokenId}`)
         }
 

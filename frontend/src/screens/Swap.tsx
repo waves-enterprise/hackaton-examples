@@ -19,28 +19,37 @@ export function SwapScreen() {
 
         const res = await window.WEWallet.publicState()
 
-        const tx = TRANSACTIONS.CallContract.V5({
-            contractId: CONTRACT_ID,
-            params: [
-                {
-                    key: 'action',
-                    value: 'swap',
-                    type: 'string'
-                },
-            ],
-            senderPublicKey: res.account.publicKey,
-            fee: fee,
-            contractVersion: 1,
-            payments: [
-                fromWest
-                    ? {amount: 100000000}
-                    : {
-                        assetId: tokenId,
-                        amount: 100000
-                    }
-                ,
-            ]
+        const tx = TRANSACTIONS.Permit.V2({
+            opType: 'add',
+            role: 'contract_developer',
+            fee: 1 * (10**8),
+            senderPublicKey: await res.account.publicKey,
+            target: '3NrPSwFyqs7D5s6MopJr4QqUKQMqni2mgqj',
+            duplicate_timestamp: Date.now()
         })
+
+        // const tx = TRANSACTIONS.CallContract.V5({
+        //     contractId: CONTRACT_ID,
+        //     params: [
+        //         {
+        //             key: 'action',
+        //             value: 'swap',
+        //             type: 'string'
+        //         },
+        //     ],
+        //     senderPublicKey: res.account.publicKey,
+        //     fee: fee,
+        //     contractVersion: 1,
+        //     payments: [
+        //         fromWest
+        //             ? {amount: 100000000}
+        //             : {
+        //                 assetId: tokenId,
+        //                 amount: 100000
+        //             }
+        //         ,
+        //     ]
+        // })
 
         const signedTx = await window.WEWallet.signTx(tx);
 

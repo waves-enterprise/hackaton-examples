@@ -20,3 +20,16 @@ RUN chmod +x entrypoint.sh
 RUN ls -l
 
 ENTRYPOINT ["/usr/app/entrypoint.sh"]
+
+
+x
+FROM we-contract:14-alpine
+
+ADD ./contract.js
+
+ENTRYPOINT ["/usr/app/entrypoint.sh"]
+
+
+
+
+
